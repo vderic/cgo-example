@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <immintrin.h>
-#include "factorial.h"
+#include "avx.h"
 
-int64_t hello(int n) {
+int64_t avx(int n) {
     __m256 a = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f};
     __m256 b = {1.1f, 2.1f, 3.1f, 4.1f, 5.1f, 6.1f, 7.1f, 8.1f};
     __m256 c;

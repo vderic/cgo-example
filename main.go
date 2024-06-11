@@ -3,9 +3,9 @@ package main
 /*
 #cgo amd64 CFLAGS: -march=haswell -O3 -funroll-loops -ftree-vectorize -ffast-math
 #cgo arm64 CFLAGS: -O3 -funroll-loops -ftree-vectorize
-#include "factorial.h"
+#include "avx.h"
 #include "sse.h"
-#include "fac.h"
+#include "vectorize.h"
 #include "sse.hpp"
 */
 import "C"
@@ -26,7 +26,7 @@ func main() {
 	start := time.Now()
 
 	n := 5
-	result := C.hello(C.int(n))
+	result := C.avx(C.int(n))
 
 	diff := time.Since(start)
 
@@ -46,7 +46,7 @@ func main() {
 
 	n = 1000000000
 	start = time.Now()
-	result = C.fac(C.int(n))
+	result = C.gccsum(C.int(n))
 	diff = time.Since(start)
 	fmt.Printf("time = %d\n", diff)
 	fmt.Printf("Vectorize Sum of %d is %d\n", n, result)

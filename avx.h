@@ -1,4 +1,4 @@
 #include <stdint.h>
 
-int64_t fac(int n);
+int64_t avx(int n);
 
