@@ -1,4 +1,4 @@
 #include <stdint.h>
 
-int64_t gccsum(int n);
+float gcc_dot_product(float *x, float *y, unsigned int n);
 

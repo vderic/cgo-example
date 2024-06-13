@@ -1,11 +1,10 @@
 #include <stdint.h>
 #include "vectorize.h"
 
-int64_t gccsum(int n) {
-    int64_t sum = 0;
-    #pragma clang loop vectorize(enable)
+float gcc_dot_product(float *x, float *y, unsigned int n) {
+    float res = 0;
     for (int i=0; i < n ; i++) {
-	    sum += i;
+	    res += x[i] * y[i];
     }
-    return sum;
+    return res;
 }

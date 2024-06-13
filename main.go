@@ -12,20 +12,30 @@ import "C"
 import (
 	"fmt"
 	"time"
+	"unsafe"
 	"github.com/vderic/cgo-example/peachpy"
 )
 
-func gosum(n int) int {
-	result := 0
-	for i := 0 ; i < n ; i++ {
-		result += i
+func go_dot_product(x []float32, y []float32, n uint) float32 {
+	result := float32(0)
+	for i := 0 ; i < int(n) ; i++ {
+		result += x[i] * y[i]
 	}
 	return result
 }
 
 func main() {
-	start := time.Now()
+	x := make([]float32, 2048)
+        y := make([]float32, len(x))
+        for i := 0; i < len(x); i++ {
+                x[i] = 2.0
+                y[i] = 3.0
+        }
 
+	start := time.Now()
+	diff := time.Since(start)
+
+	/*
 	n := 5
 	result := C.avx(C.int(n))
 
@@ -46,26 +56,22 @@ func main() {
 	fmt.Printf("time = %d\n", diff)
 
 	n = 1000000000
+	*/
+
 	start = time.Now()
-	result = C.gccsum(C.int(n))
+	gccresult := C.gcc_dot_product((*C.float)(unsafe.Pointer(&x[0])), (*C.float)(unsafe.Pointer(&y[0])), C.uint(len(x)))
 	diff = time.Since(start)
 	fmt.Printf("time = %d\n", diff)
-	fmt.Printf("Vectorize Sum of %d is %d\n", n, result)
+	fmt.Printf("Vectorize Sum of is %f\n", gccresult)
 
-	n = 1000000000
 	start = time.Now()
-	sum := gosum(n)
+	goresult := go_dot_product(x, y, uint(len(x)))
 	diff = time.Since(start)
 	fmt.Printf("time = %d\n", diff)
-	fmt.Printf("GoSum of %d = %d\n", n, sum)
+	fmt.Printf("GoSum = %f\n", goresult)
 
 
-	x := make([]float32, 2048)
-        y := make([]float32, len(x))
-        for i := 0; i < len(x); i++ {
-                x[i] = 2.0
-                y[i] = 3.0
-        }
-	z := peachpy.DotProduct(x, y, uint(len(x)))
+	result := peachpy.DotProduct(&x[0], &y[0], uint(len(x)))
+	fmt.Printf("z = %f\n", result)
 }
 
