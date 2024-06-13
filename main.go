@@ -16,16 +16,16 @@ import (
 	"github.com/vderic/cgo-example/peachpy"
 )
 
-func go_dot_product(x []float32, y []float32, n uint) float32 {
-	result := float32(0)
+func go_dot_product(x []float32, y []float32, n uint) float64 {
+	result := float64(0)
 	for i := 0 ; i < int(n) ; i++ {
-		result += x[i] * y[i]
+		result += float64(x[i] * y[i])
 	}
 	return result
 }
 
 func main() {
-	x := make([]float32, 2048)
+	x := make([]float32, 204800000)
         y := make([]float32, len(x))
         for i := 0; i < len(x); i++ {
                 x[i] = 2.0
@@ -71,7 +71,10 @@ func main() {
 	fmt.Printf("GoSum = %f\n", goresult)
 
 
+	start = time.Now()
 	result := peachpy.DotProduct(&x[0], &y[0], uint(len(x)))
+	diff = time.Since(start)
+	fmt.Printf("time = %d\n", diff)
 	fmt.Printf("z = %f\n", result)
 }
 
