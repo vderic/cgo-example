@@ -12,6 +12,7 @@ import "C"
 import (
 	"fmt"
 	"time"
+	"github.com/vderic/cgo-example/peachpy"
 )
 
 func gosum(n int) int {
@@ -58,5 +59,13 @@ func main() {
 	fmt.Printf("time = %d\n", diff)
 	fmt.Printf("GoSum of %d = %d\n", n, sum)
 
+
+	x := make([]float32, 2048)
+        y := make([]float32, len(x))
+        for i := 0; i < len(x); i++ {
+                x[i] = 2.0
+                y[i] = 3.0
+        }
+	z := peachpy.DotProduct(x, y, uint(len(x)))
 }
 
