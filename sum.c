@@ -15,7 +15,7 @@ double fake_gcc_sum(float *r, float *x, float *y, unsigned int n) {
     double res = 0;
 
     for (int i=0; i < n ; i++) {
-	    res += x[i] * y[i];
+	    res += x[i];
     }
 
     return res; 
