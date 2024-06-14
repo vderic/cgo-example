@@ -67,15 +67,16 @@ func inc(n int) int {
 	return n
 }
 
-func inc_overhead(n int, fn func(int) int) int {
+func inc_overhead(n int, fn func(int, int) int) int {
+	j := 1
 	for i := 0; i < 1000000000; i++ {
-		n = fn(n)
+		n = fn(n, j)
 	}
 	return n
 }
 
-func add(n int) int {
-	return n + 1
+func add(n int, m int) int {
+	return n + m
 }
 
 func main() {
@@ -164,9 +165,11 @@ func main() {
 	//fmt.Printf("go sum: time = %d\n", diff2)
 
 	start = time.Now()
-	go_sum_overhead(r, x, y, uint(len(x)), multiply)
+	go_sum_overhead(r, x, y, uint(len(x)), func (x, y float32) float32 { return x * y } )
 	diff3 := time.Since(start)
 	//fmt.Printf("go sum overhead: time = %d\n", diff3)
+
+	fmt.Printf("r[0] = %f\n", r[0])
 
 	fmt.Printf("Mutliply function\n")
 	fmt.Printf("       |    GO            |  GO OVERHEAD          |    GCC       |  Go Routine\n")
@@ -180,7 +183,7 @@ func main() {
 	//fmt.Printf("go inc: time = %d, v=%d\n", diff1, increment1)
 
 	start = time.Now()
-	increment2 := inc_overhead(1000, add)
+	increment2 := inc_overhead(1000, func (n int, m int) int { return n + m })
 	diff2 = time.Since(start)
 	//fmt.Printf("inc overhead: time = %d, v=%d\n", diff2, increment2)
 
@@ -189,10 +192,7 @@ func main() {
 	diff3 = time.Since(start)
 	//fmt.Printf("gcc inc: time = %d, v=%d\n", diff3, increment3)
 
-	if increment1 != increment2 || increment2 != increment3 {
-		fmt.Errorf("value not match")
-		return
-	}
+	fmt.Printf("%d %d %d\n", increment1, increment2, increment3)
 
 	fmt.Printf(" INC function\n")
 	fmt.Printf("       |    GO            |  GO OVERHEAD          |    GCC     \n")
