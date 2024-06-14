@@ -2,7 +2,7 @@
 #include "inc.h"
 
 int gcc_inc(int n) {
-    for (int i=0; i < 100000000 ; i++) {
+    for (int i=0; i < 1000000000 ; i++) {
 	    n += 1;
     }
     return n;

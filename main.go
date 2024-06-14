@@ -73,9 +73,9 @@ func main() {
         }
 
 	start := time.Now()
-	diff := time.Since(start)
 
 	/*
+	diff := time.Since(start)
 	n := 5
 	result := C.avx(C.int(n))
 
@@ -96,53 +96,66 @@ func main() {
 	fmt.Printf("time = %d\n", diff)
 
 	n = 1000000000
-	*/
 
 	start = time.Now()
 	gccresult := C.gcc_dot_product((*C.float)(unsafe.Pointer(&x[0])), (*C.float)(unsafe.Pointer(&y[0])), C.uint(len(x)))
 	diff = time.Since(start)
-	fmt.Printf("vectorized dot product: time = %d\n", diff)
-	fmt.Printf("Vectorize dot product of is %f\n", gccresult)
+	//fmt.Printf("vectorized dot product: time = %d\n", diff)
+	//fmt.Printf("Vectorize dot product of is %f\n", gccresult)
 
 	start = time.Now()
 	goresult := go_dot_product(x, y, uint(len(x)))
 	diff = time.Since(start)
-	fmt.Printf("go dot proudct: time = %d\n", diff)
-	fmt.Printf("Go dot product = %f\n", goresult)
+	//fmt.Printf("go dot proudct: time = %d\n", diff)
+	//fmt.Printf("Go dot product = %f\n", goresult)
+	*/
 
 	r := make([]float32, len(x))
 	start = time.Now()
 	C.gcc_sum((*C.float)(unsafe.Pointer(&r[0])), (*C.float)(unsafe.Pointer(&x[0])), (*C.float)(unsafe.Pointer(&y[0])),  C.uint(len(x)))
 	diff1 := time.Since(start)
-	fmt.Printf("vectorized sum: time = %d\n", diff1)
+	//fmt.Printf("vectorized sum: time = %d\n", diff1)
 
 	start = time.Now()
 	go_sum(r, x, y,  uint(len(x)))
 	diff2 := time.Since(start)
-	fmt.Printf("go sum: time = %d\n", diff2)
+	//fmt.Printf("go sum: time = %d\n", diff2)
 
 	start = time.Now()
 	go_sum_overhead(r, x, y,  uint(len(x)))
 	diff3 := time.Since(start)
-	fmt.Printf("go sum overhead: time = %d\n", diff3)
+	//fmt.Printf("go sum overhead: time = %d\n", diff3)
 
+	fmt.Printf("Mutliply function")
+	fmt.Printf("       |    GO            |  GO OVERHEAD          |    GCC     \n")
+	fmt.Printf(" Time  |    %d     |      %d       |    %d\n", diff2, diff3, diff1)
 	fmt.Printf("ratio compared to go: (GO/GO) 1 vs (GO_OVERHEAD/GO) %f vs (GCC/GO) %f\n",  float32(diff3)/float32(diff2), float32(diff1)/float32(diff2))
 
 	start = time.Now()
 	increment1 := inc(1000)
 	diff1 = time.Since(start)
-	fmt.Printf("go inc: time = %d, v=%d\n", diff1, increment1)
+	//fmt.Printf("go inc: time = %d, v=%d\n", diff1, increment1)
 
 	start = time.Now()
 	increment2 := inc_overhead(1000)
 	diff2 = time.Since(start)
-	fmt.Printf("inc overhead: time = %d, v=%d\n", diff2, increment2)
+	//fmt.Printf("inc overhead: time = %d, v=%d\n", diff2, increment2)
 
 	start = time.Now()
-	nn := 1000
-	increment3 := C.gcc_inc(C.int(nn))
+	increment3 := int(C.gcc_inc(C.int(1000)))
 	diff3 = time.Since(start)
-	fmt.Printf("gcc inc: time = %d, v=%d\n", diff3, increment3)
+	//fmt.Printf("gcc inc: time = %d, v=%d\n", diff3, increment3)
+
+	if increment1 != increment2 || increment2 != increment3 {
+		fmt.Errorf("value not match")
+		return
+	}
+
+	fmt.Printf(" INC function\n")
+	fmt.Printf("       |    GO            |  GO OVERHEAD          |    GCC     \n")
+	fmt.Printf(" Time  |    %d     |      %d       |    %d\n", diff1, diff2, diff3)
+	//fmt.Printf("  Ratio |   %f      |  %f           |    %f\n", 1.0, float32(diff2)/float32(diff1), float32(diff3)/float32(diff1))
+
 
 	fmt.Printf("ratio compared to go: (GO/GO) 1 vs (GO_OVERHEAD/GO) %f vs (GCC/GO) %f\n",  float32(diff2)/float32(diff1), float32(diff3)/float32(diff1))
 	/*
