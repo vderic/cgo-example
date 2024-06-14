@@ -126,7 +126,7 @@ func main() {
 	diff3 := time.Since(start)
 	//fmt.Printf("go sum overhead: time = %d\n", diff3)
 
-	fmt.Printf("Mutliply function")
+	fmt.Printf("Mutliply function\n")
 	fmt.Printf("       |    GO            |  GO OVERHEAD          |    GCC     \n")
 	fmt.Printf(" Time  |    %d     |      %d       |    %d\n", diff2, diff3, diff1)
 	fmt.Printf("ratio compared to go: (GO/GO) 1 vs (GO_OVERHEAD/GO) %f vs (GCC/GO) %f\n",  float32(diff3)/float32(diff2), float32(diff1)/float32(diff2))
