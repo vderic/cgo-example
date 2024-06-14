@@ -11,13 +11,12 @@ int gcc_sum(float *r, float *x, float *y, unsigned int n) {
 }
 
 /* When we modify the return float * r as return value, the processing time will increase greatly */
-int fake_gcc_sum(float *r, float *x, float *y, unsigned int n) {
-    float *rr =  malloc(sizeof(float) * n);
+double fake_gcc_sum(float *r, float *x, float *y, unsigned int n) {
+    double res = 0;
 
     for (int i=0; i < n ; i++) {
-	    rr[i] = x[i] * y[i];
+	    res += x[i] * y[i];
     }
 
-    free(rr);
-    return 100; 
+    return res; 
 }
