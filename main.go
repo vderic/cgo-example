@@ -17,6 +17,7 @@ import (
 	"time"
 	"unsafe"
 	// "github.com/vderic/cgo-example/peachpy"
+	"github.com/gonum/floats"
 )
 
 func go_dot_product(x []float32, y []float32, n uint) float64 {
@@ -131,6 +132,22 @@ func main() {
 	gor_sum(r, x, y, uint(len(x)))
 	diff4 := time.Since(start)
 	//fmt.Printf("go routine sum: time = %d\n", diff4)
+
+	x64 := make([]float64, n)
+	y64 := make([]float64, len(x))
+	r64 := make([]float64, len(x))
+	start = time.Now()
+	floats.AddTo(r64, x64, y64)
+	diff5 := time.Since(start)
+
+	/*
+	for i := 0 ; i < 10 ; i++ {
+		fmt.Printf(" %f ", r[i])
+	}
+	fmt.Print()
+	*/
+	fmt.Printf("gonum %d\n", diff5)
+
 
 	start = time.Now()
 	C.gcc_sum((*C.float)(unsafe.Pointer(&r[0])), (*C.float)(unsafe.Pointer(&x[0])), (*C.float)(unsafe.Pointer(&y[0])), C.uint(len(x)))
