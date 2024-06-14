@@ -111,21 +111,26 @@ func main() {
 		result = C.sse2(C.int(n))
 		diff = time.Since(start)
 		fmt.Printf("time = %d\n", diff)
-
-		n = 1000000000
-
-		start = time.Now()
-		gccresult := C.gcc_dot_product((*C.float)(unsafe.Pointer(&x[0])), (*C.float)(unsafe.Pointer(&y[0])), C.uint(len(x)))
-		diff = time.Since(start)
-		//fmt.Printf("vectorized dot product: time = %d\n", diff)
-		//fmt.Printf("Vectorize dot product of is %f\n", gccresult)
-
-		start = time.Now()
-		goresult := go_dot_product(x, y, uint(len(x)))
-		diff = time.Since(start)
-		//fmt.Printf("go dot proudct: time = %d\n", diff)
-		//fmt.Printf("Go dot product = %f\n", goresult)
 	*/
+
+	start = time.Now()
+	gccresult := C.gcc_dot_product((*C.float)(unsafe.Pointer(&x[0])), (*C.float)(unsafe.Pointer(&y[0])), C.uint(len(x)))
+	diff7 := time.Since(start)
+	//fmt.Printf("vectorized dot product: time = %d\n", diff7)
+	//fmt.Printf("Vectorize dot product of is %f\n", gccresult)
+
+	start = time.Now()
+	goresult := go_dot_product(x, y, uint(len(x)))
+	diff8 := time.Since(start)
+
+	fmt.Printf("dot product result = %f %f\n", gccresult, goresult)
+	//fmt.Printf("go dot proudct: time = %d\n", diff8)
+	//fmt.Printf("Go dot product = %f\n", goresult)
+
+	fmt.Printf("Dot Product function\n")
+	fmt.Printf("       |    GO            |     GCC       |\n")
+	fmt.Printf(" Time  |    %d     |     %d        |\n", diff8, diff7)
+	fmt.Printf("ratio compared to go: (GO/GO) 1 vs (GCC/GO) %f\n", float32(diff7)/float32(diff8))
 
 	start = time.Now()
 	fakev := C.fake_gcc_sum((*C.float)(unsafe.Pointer(&r[0])), (*C.float)(unsafe.Pointer(&x[0])), (*C.float)(unsafe.Pointer(&y[0])), C.uint(len(x)))
