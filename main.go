@@ -129,8 +129,9 @@ func main() {
 	*/
 
 	start = time.Now()
-	C.fake_gcc_sum(C.uint(len(x)))
+	fakev := C.fake_gcc_sum(C.uint(len(x)))
 	diff6 := time.Since(start)
+	fmt.Printf("fake v = %d\n", int(fakev))
 	fmt.Printf("fake gcc sum %d\n", diff6)
 
 	start = time.Now()

@@ -1,4 +1,6 @@
 #include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include "sum.h"
 
 int gcc_sum(float *r, float *x, float *y, unsigned int n) {
@@ -9,9 +11,9 @@ int gcc_sum(float *r, float *x, float *y, unsigned int n) {
 }
 
 int fake_gcc_sum(unsigned int n) {
-    float xx[n];
-    float yy[n];
-    float rr[n];
+    float *xx = malloc(sizeof(float) * n);
+    float *yy =  malloc(sizeof(float) * n);
+    float *rr =  malloc(sizeof(float) * n);
 
     for (int i = 0 ; i < n ; i++) {
 	    xx[i] = 2;
@@ -21,5 +23,10 @@ int fake_gcc_sum(unsigned int n) {
     for (int i=0; i < n ; i++) {
 	    rr[i] = xx[i] * yy[i];
     }
-    return 0;
+
+    //
+    free(xx);
+    free(yy);
+    free(rr);
+    return 100; 
 }
