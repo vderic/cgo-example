@@ -128,10 +128,10 @@ func main() {
 	*/
 
 	start = time.Now()
-	fakev := C.fake_gcc_sum((*C.float)(unsafe.Pointer(&r[0])), (*C.float)(unsafe.Pointer(&x[0])), (*C.float)(unsafe.Pointer(&y[0])), C.uint(len(x)))
+	C.fake_gcc_sum((*C.float)(unsafe.Pointer(&r[0])), (*C.float)(unsafe.Pointer(&x[0])), (*C.float)(unsafe.Pointer(&y[0])), C.uint(len(x)))
 	diff6 := time.Since(start)
-	fmt.Printf("fake v = %d\n", int(fakev))
-	fmt.Printf("fake gcc sum %d\n", diff6)
+	//fmt.Printf("fake v = %d\n", int(fakev))
+	//fmt.Printf("fake gcc sum %d\n", diff6)
 
 	start = time.Now()
 	gor_sum(r, x, y, uint(len(x)))
@@ -146,13 +146,12 @@ func main() {
 	diff5 := time.Since(start)
 
 	/*
-	for i := 0 ; i < 10 ; i++ {
-		fmt.Printf(" %f ", r[i])
-	}
-	fmt.Print()
+		for i := 0 ; i < 10 ; i++ {
+			fmt.Printf(" %f ", r[i])
+		}
+		fmt.Print()
 	*/
 	fmt.Printf("gonum %d\n", diff5)
-
 
 	start = time.Now()
 	C.gcc_sum((*C.float)(unsafe.Pointer(&r[0])), (*C.float)(unsafe.Pointer(&x[0])), (*C.float)(unsafe.Pointer(&y[0])), C.uint(len(x)))
@@ -165,17 +164,17 @@ func main() {
 	//fmt.Printf("go sum: time = %d\n", diff2)
 
 	start = time.Now()
-	go_sum_overhead(r, x, y, uint(len(x)), func (x, y float32) float32 { return x * y } )
+	go_sum_overhead(r, x, y, uint(len(x)), func(x, y float32) float32 { return x * y })
 	diff3 := time.Since(start)
 	//fmt.Printf("go sum overhead: time = %d\n", diff3)
 
-	fmt.Printf("r[0] = %f\n", r[0])
+	//fmt.Printf("r[0] = %f\n", r[0])
 
 	fmt.Printf("Mutliply function\n")
-	fmt.Printf("       |    GO            |  GO OVERHEAD          |    GCC       |  Go Routine\n")
-	fmt.Printf(" Time  |    %d     |      %d       |    %d        |      %d\n", diff2, diff3, diff1, diff4)
-	fmt.Printf("ratio compared to go: (GO/GO) 1 vs (GO_OVERHEAD/GO) %f vs (GCC/GO) %f vs (Go Rountine/Go) %f\n",
-		float32(diff3)/float32(diff2), float32(diff1)/float32(diff2), float32(diff4)/float32(diff2))
+	fmt.Printf("       |    GO            |  GO OVERHEAD          |    GCC       |  Go Routine   | Fake GCC\n")
+	fmt.Printf(" Time  |    %d     |      %d       |    %d        |      %d      |      %d     \n", diff2, diff3, diff1, diff4, diff6)
+	fmt.Printf("ratio compared to go: (GO/GO) 1 vs (GO_OVERHEAD/GO) %f vs (GCC/GO) %f vs (Go Rountine/Go) %f vs (FAKEGCC/GO) %f\n",
+		float32(diff3)/float32(diff2), float32(diff1)/float32(diff2), float32(diff4)/float32(diff2), float32(diff6)/float32(diff2))
 
 	start = time.Now()
 	increment1 := inc(1000)
@@ -183,7 +182,7 @@ func main() {
 	//fmt.Printf("go inc: time = %d, v=%d\n", diff1, increment1)
 
 	start = time.Now()
-	increment2 := inc_overhead(1000, func (n int, m int) int { return n + m })
+	increment2 := inc_overhead(1000, func(n int, m int) int { return n + m })
 	diff2 = time.Since(start)
 	//fmt.Printf("inc overhead: time = %d, v=%d\n", diff2, increment2)
 
