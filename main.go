@@ -130,7 +130,7 @@ func main() {
 	start = time.Now()
 	fakev := C.fake_gcc_sum((*C.float)(unsafe.Pointer(&r[0])), (*C.float)(unsafe.Pointer(&x[0])), (*C.float)(unsafe.Pointer(&y[0])), C.uint(len(x)))
 	diff6 := time.Since(start)
-	fmt.Printf("fake v = %f\n", float64(fakev))
+	fmt.Printf("single return value v = %f\n", float64(fakev))
 	//fmt.Printf("fake gcc sum %d\n", diff6)
 
 	start = time.Now()
@@ -171,7 +171,7 @@ func main() {
 	//fmt.Printf("r[0] = %f\n", r[0])
 
 	fmt.Printf("Mutliply function\n")
-	fmt.Printf("       |    GO            |  GO OVERHEAD          |    GCC       |  Go Routine   | Fake GCC\n")
+	fmt.Printf("       |    GO            |  GO OVERHEAD          |    GCC       |  Go Routine   | GCC Single return value\n")
 	fmt.Printf(" Time  |    %d     |      %d       |    %d        |      %d      |      %d     \n", diff2, diff3, diff1, diff4, diff6)
 	fmt.Printf("ratio compared to go: (GO/GO) 1 vs (GO_OVERHEAD/GO) %f vs (GCC/GO) %f vs (Go Rountine/Go) %f vs (FAKEGCC/GO) %f\n",
 		float32(diff3)/float32(diff2), float32(diff1)/float32(diff2), float32(diff4)/float32(diff2), float32(diff6)/float32(diff2))
