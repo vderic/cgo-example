@@ -34,9 +34,9 @@ func go_sum(r []float32, x []float32, y []float32, n uint) {
 	}
 }
 
-func go_sum_overhead(r []float32, x []float32, y []float32, n uint) {
+func go_sum_overhead(r []float32, x []float32, y []float32, n uint, fn func(x, y float32) float32) {
 	for i := 0; i < int(n); i++ {
-		r[i] = multiply(x[i], y[i])
+		r[i] = fn(x[i], y[i])
 	}
 }
 
@@ -68,9 +68,9 @@ func inc(n int) int {
 	return n
 }
 
-func inc_overhead(n int) int {
+func inc_overhead(n int, fn func(int) int) int {
 	for i := 0; i < 1000000000; i++ {
-		n = add(n)
+		n = fn(n)
 	}
 	return n
 }
@@ -166,7 +166,7 @@ func main() {
 	//fmt.Printf("go sum: time = %d\n", diff2)
 
 	start = time.Now()
-	go_sum_overhead(r, x, y, uint(len(x)))
+	go_sum_overhead(r, x, y, uint(len(x)), multiply)
 	diff3 := time.Since(start)
 	//fmt.Printf("go sum overhead: time = %d\n", diff3)
 
@@ -182,7 +182,7 @@ func main() {
 	//fmt.Printf("go inc: time = %d, v=%d\n", diff1, increment1)
 
 	start = time.Now()
-	increment2 := inc_overhead(1000)
+	increment2 := inc_overhead(1000, add)
 	diff2 = time.Since(start)
 	//fmt.Printf("inc overhead: time = %d, v=%d\n", diff2, increment2)
 
