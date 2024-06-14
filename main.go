@@ -129,6 +129,11 @@ func main() {
 	*/
 
 	start = time.Now()
+	C.fake_gcc_sum(C.uint(len(x)))
+	diff6 := time.Since(start)
+	fmt.Printf("fake gcc sum %d\n", diff6)
+
+	start = time.Now()
 	gor_sum(r, x, y, uint(len(x)))
 	diff4 := time.Since(start)
 	//fmt.Printf("go routine sum: time = %d\n", diff4)
