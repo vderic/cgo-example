@@ -40,7 +40,6 @@ func go_sum_overhead(r []float32, x []float32, y []float32, n uint, fn func(x, y
 	}
 }
 
-//go:noinline
 func multiply(x float32, y float32) float32 {
 	return x * y
 }
@@ -75,7 +74,6 @@ func inc_overhead(n int, fn func(int) int) int {
 	return n
 }
 
-//go:noinline
 func add(n int) int {
 	return n + 1
 }
