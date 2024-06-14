@@ -7,6 +7,7 @@ package main
 #include "sse.h"
 #include "vectorize.h"
 #include "sse.hpp"
+#include "sum.h"
 */
 import "C"
 import (
@@ -25,7 +26,7 @@ func go_dot_product(x []float32, y []float32, n uint) float64 {
 }
 
 func main() {
-	x := make([]float32, 204800000)
+	x := make([]float32, 6)
         y := make([]float32, len(x))
         for i := 0; i < len(x); i++ {
                 x[i] = 2.0
@@ -70,6 +71,17 @@ func main() {
 	fmt.Printf("time = %d\n", diff)
 	fmt.Printf("GoSum = %f\n", goresult)
 
+	r := make([]float32, len(x))
+	start = time.Now()
+	C.gcc_sum((*C.float)(unsafe.Pointer(&x[0])), (*C.float)(unsafe.Pointer(&r[0])),  C.uint(len(x)))
+	diff = time.Since(start)
+	fmt.Printf("time = %d\n", diff)
+
+	for i := 0 ; i < len(x) ; i++ {
+		fmt.Printf("%f ", r[i])
+	}
+	fmt.Printf("\n")
+
 
 	start = time.Now()
 	result := peachpy.DotProduct(&x[0], &y[0], uint(len(x)))
@@ -77,4 +89,6 @@ func main() {
 	fmt.Printf("time = %d\n", diff)
 	fmt.Printf("z = %f\n", result)
 }
+
+
 
