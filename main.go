@@ -28,7 +28,7 @@ func go_dot_product(x []float32, y []float32, n uint) float64 {
 
 func go_sum(r []float32, x []float32, y []float32, n uint) {
 	for i := 0 ; i < int(n) ; i++ {
-		r[i] = x[i] * x[i]
+		r[i] = x[i] * y[i]
 	}
 }
 
